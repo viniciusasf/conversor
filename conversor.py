@@ -1,74 +1,73 @@
-print("\n***CONVERSOR DE MEDIDAS***\n")
-medida = ("KM", "MT", "CM")
-while True:
-    m = input(f"DIGITE A PRIMEIRA MEDIDA, VALORES VALIDOS {medida}: ")
-    medida1 = m.upper() #<-- transformei em maiuscula
-    if not medida1.isalpha(): #<-- verifico se digitou numero(se não for string)
-        print(f"\n\nALERTA 1: Não digite numeros ({medida1})"
-              f" os valores válidos são {medida}\n") #não digite numeros, volta inicio
+import tkinter as tk
+from tkinter import ttk
 
-    elif medida1 not in medida:
-        print (f"\n\nALERTA 1.1: Valor {medida1} incorreto, digite corretamente o valor da área,"
-               f"os valores aceitos são {medida}\n")
-    else:
-        break
+def ler_medida(texto_medida, medidas):
+    opcoes = ','.join(medidas.keys())
+    param = input(f"DIGITE A {texto_medida}, VALORES VALIDOS {opcoes}: ").upper()
+    if param not in medidas.keys():
+        print(f"\n\nALERTA 1.1: Valor {param} incorreto, digite corretamente o valor da área,"
+              f"os valores aceitos são {medidas.keys()}\n")
+        param = ler_medida(texto_medida, medidas)
+    return param
 
-while True:
+
+def ler_valor(medida1):
     valor = str(input(f"\nQUANTOS {medida1}(S) VAI CONVERTER?: "))
-
-    if valor.isalpha(): #<-- Verifica se o valor é letra, retorna para inicio
+    if valor.isalpha():
         print(f"\n\nALERTA 2: Digite apenas NUMEROS, O valor digitado foi {valor} : \n")
-
-    else:
-        break
-
-while True:
-    c = input(f"\nDIGITE A MEDIDA A SER CONVERTIDA EM {medida1}, VALORES VÁLIDOS {medida}: ")
-    medida2 = c.upper()  # <-- transformei em maiuscula
-    if not medida2.isalpha():  # <-- verifico se digitou numero(se não for string)
-        print (f"\n\nALERTA 3: Não digite numeros ({medida2})"
-               f" os valores válidos são {medida}\n")  # não digite numeros, volta inicio
-
-    elif medida2 not in medida:
-        print (f"\n\nALERTA 1.1: Valor {medida2} incorreto, digite corretamente o valor da área,"
-               f"os valores aceitos são {medida}\n")
-    else:
-        break
+        valor = ler_valor(medida1)
+    return valor
 
 
-if medida1 == "KM" and medida2 == "MT":
-    basekm = 10000
-    v = float(valor)
-    calculo = v * basekm
-    print(f'\n\n{v} KILOMETRO(s) É IGUAL A {calculo} {medida2} METRO(s)\n')
+def calc(medida1, medida2, valor, medidas):
+    return (float(valor) / medidas[medida1]) * medidas[medida2]
 
-if medida1 == "MT" and medida2 == "KM":
-    basekm = 1000
-    v = float(valor)
-    calculo = v / basekm
-    print(f'\n\nA conversão de {v} METROS(s) para {medida2} é de {calculo} KILOMETROS(s)\n')
 
-if medida1 == "MT" and medida2 == "CM":
-    basecm = 100
-    v = float(valor)
-    calculo = v * basecm
-    print(f'\n\nA conversão de {v} METROS(s) para {medida2} é de {calculo} CENTÍMETROS(s)\n')
+def main():
+    print("\n***CONVERSOR DE MEDIDAS***\n")
+    medidas = {"KM": 1, "MT": 1000, "CM": 100000, "ML":1e+6}
 
-if medida1 == "CM" and medida2 == "MT":
-    basecm = 100
-    v = float(valor)
-    calculo = v/basecm
-    print(f'\n\nA conversão de {v} CENTÍMETRO(s) para {medida2} é de {calculo} METROS(s)\n')
+    medida1 = ler_medida("PRIMEIRA MEDIDA", medidas)
+    valor = ler_valor(medida1)
+    medida2 = ler_medida("SEGUNDA MEDIDA", medidas)
 
-if medida1 == "KM" and medida2 == "CM":
-    basekm = 100000
-    v = float(valor)
-    calculo = v * basekm
-    print(f'\n\nA conversão de {v} KILOMETRO(s) para {medida2} é de {calculo} CENTÍMETRO(s)\n')
+    resultado = calc(medida1, medida2, valor, medidas)
+    print(f'\n\nA conversão de {valor} {medida1} para {medida2} é de {resultado} {medida2}(s)\n')
 
-if medida1 == "CM" and medida2 == "KM":
-    basecm = 100000
-    v = float(valor)
-    calculo = v / basecm
-    print('\n\nA conversão de {0} CENTÍMENTRO(s) para {1} é de {2:f} KILOMETROS(s)\n'.format(v, medida2, calculo))
+
+def build_form():
+    # Setup the root UI
+    root = tk.Tk()
+    root.title("CONVERSOR DE MEDIDAS")
+
+    left_frame = tk.Frame(root)
+
+    # Setup filter frame
+    ttk.Label(left_frame, text="DE2 :").grid(row=0, column=0, sticky=tk.NSEW)
+    entry = ttk.Entry(left_frame)
+    entry.insert(1, "")
+    entry.grid(row=0, column=2)
+
+    left_frame.grid(row=0, column=0)
+
+
+    ttk.Button(left_frame,
+               text="search").grid(row=0, column=3)
+
+    ttk.Button(left_frame,
+               text="reset").grid(row=0, column=4)
+
+    ttk.Button(left_frame,
+               text="open file").grid(row=0, column=5)
+
+    tk.Grid.rowconfigure(root, 1, weight=1)
+    tk.Grid.columnconfigure(root, 2, weight=1)
+    root.update_idletasks()
+    #root.attributes('-zoomed', True)
+
+    root.mainloop()
+
+
+if __name__ == '__main__':
+    build_form()
 
