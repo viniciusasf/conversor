@@ -1,5 +1,6 @@
-import tkinter as tk
-from tkinter import ttk
+from tkinter import *
+from tkinter.ttk import *
+
 
 def ler_medida(texto_medida, medidas):
     opcoes = ','.join(medidas.keys())
@@ -24,8 +25,7 @@ def calc(medida1, medida2, valor, medidas):
 
 
 def main():
-    print("\n***CONVERSOR DE MEDIDAS***\n")
-    medidas = {"KM": 1, "MT": 1000, "CM": 100000, "ML":1e+6}
+    medidas = {"KM": 1, "MT": 1000, "CM": 100000, "ML": 1e+6}
 
     medida1 = ler_medida("PRIMEIRA MEDIDA", medidas)
     valor = ler_valor(medida1)
@@ -35,39 +35,44 @@ def main():
     print(f'\n\nA conversão de {valor} {medida1} para {medida2} é de {resultado} {medida2}(s)\n')
 
 
-def build_form():
-    # Setup the root UI
-    root = tk.Tk()
-    root.title("CONVERSOR DE MEDIDAS")
 
-    left_frame = tk.Frame(root)
-
-    # Setup filter frame
-    ttk.Label(left_frame, text="DE2 :").grid(row=0, column=0, sticky=tk.NSEW)
-    entry = ttk.Entry(left_frame)
-    entry.insert(1, "")
-    entry.grid(row=0, column=2)
-
-    left_frame.grid(row=0, column=0)
+def limpar():
+    combo.set("")
+    spin.set("")
+    combo2.set("")
 
 
-    ttk.Button(left_frame,
-               text="search").grid(row=0, column=3)
+janela = Tk()
 
-    ttk.Button(left_frame,
-               text="reset").grid(row=0, column=4)
-
-    ttk.Button(left_frame,
-               text="open file").grid(row=0, column=5)
-
-    tk.Grid.rowconfigure(root, 1, weight=1)
-    tk.Grid.columnconfigure(root, 2, weight=1)
-    root.update_idletasks()
-    #root.attributes('-zoomed', True)
-
-    root.mainloop()
+medidas = {"KM": 1, "MT": 1000, "CM": 100000, "ML": 1e+6}
 
 
-if __name__ == '__main__':
-    build_form()
+janela.title("PRIMEIRA JANELA")
+#larguraxAltura+DistanciaDireita+DistanciaTopo
+janela.geometry("250x250+800+300")
 
+title = Label(janela, text="CONVERSOR DE MEDIDA")
+title.pack()
+
+combo = Combobox(janela, width=35, height=5)
+combo["values"] = ("KM", 'MT', 'CM')
+combo.place(x=190, y=300)
+combo.pack()
+
+spin = Spinbox(janela, from_=1, to=100, width=10)
+spin.pack()
+
+combo2 = Combobox(janela, width=35)
+combo2["values"] = ("KM", 'MT', 'CM')
+combo2.pack()
+
+resultado = Label(janela, text="RESULTADO")
+resultado.pack()
+
+
+bt = Button(janela, width=20, text="LIMPAR", command=limpar)
+bt.place(x=100, y=100)
+bt.pack()
+
+
+janela.mainloop()
