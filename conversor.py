@@ -21,57 +21,59 @@ def ler_valor(medida1):
 
 
 def calc(medida1, medida2, valor, medidas):
-    return (float(valor) / medidas[medida1]) * medidas[medida2]
-
+    return (float(valor.replace(",", ".")) / medidas[medida1]) * medidas[medida2]
 
 def main():
     medidas = {"KM": 1, "MT": 1000, "CM": 100000, "ML": 1e+6}
 
-    medida1 = ler_medida("PRIMEIRA MEDIDA", medidas)
-    valor = ler_valor(medida1)
-    medida2 = ler_medida("SEGUNDA MEDIDA", medidas)
-
+    medida1 = combo.get()
+    valor = qtde.get()
+    medida2 = combo2.get()
     resultado = calc(medida1, medida2, valor, medidas)
-    print(f'\n\nA conversão de {valor} {medida1} para {medida2} é de {resultado} {medida2}(s)\n')
-
+    resultadof = f'\n\nA conversão de {valor} {medida1} para {medida2} é de {resultado} {medida2}(s)\n'
+    labelresultado["text"] = resultadof
 
 
 def limpar():
     combo.set("")
-    spin.set("")
+    qtde.set("")
     combo2.set("")
+    labelresultado['text']=0
 
 
 janela = Tk()
 
-medidas = {"KM": 1, "MT": 1000, "CM": 100000, "ML": 1e+6}
-
-
 janela.title("PRIMEIRA JANELA")
 #larguraxAltura+DistanciaDireita+DistanciaTopo
-janela.geometry("250x250+800+300")
+janela.geometry("500x500+300+300")
+fontPadrao = ("Courier", 10, "bold")
 
-title = Label(janela, text="CONVERSOR DE MEDIDA")
-title.pack()
+title = Label(janela, text="CONVERSOR DE MEDIDA", font=fontPadrao, background="red", foreground="white")
+title.place()
 
-combo = Combobox(janela, width=35, height=5)
-combo["values"] = ("KM", 'MT', 'CM')
-combo.place(x=190, y=300)
-combo.pack()
+combo = Combobox(janela, width=35, values=["KM", 'MT', 'CM'], state="readonly")
+combo.set("SELECIONE A PRIMEIRA MEDIDA")
+combo.place(x=190, y=500)
 
-spin = Spinbox(janela, from_=1, to=100, width=10)
-spin.pack()
+qtde = Spinbox(janela, from_=1, to=100, width=10)
+qtde.set("VALOR")
 
-combo2 = Combobox(janela, width=35)
-combo2["values"] = ("KM", 'MT', 'CM')
-combo2.pack()
+combo2 = Combobox(janela, width=35, values=["KM", 'MT', 'CM'], state="readonly")
+combo2.set("SELECIONE A SEGUNDA MEDIDA")
 
-resultado = Label(janela, text="RESULTADO")
-resultado.pack()
+labelresultado = Label(janela, text="0")
 
+btresultado = Button(janela, width=20, text="RESULTADO", command=main)
 
 bt = Button(janela, width=20, text="LIMPAR", command=limpar)
-bt.place(x=100, y=100)
+
+
+title.pack(padx='10', pady='10')
+combo.pack(padx='10', pady='10')
+qtde.pack(padx='10', pady='10')
+combo2.pack(padx='10', pady='10')
+labelresultado.pack(padx='10', pady='10')
+btresultado.pack()
 bt.pack()
 
 
